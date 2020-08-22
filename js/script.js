@@ -4,10 +4,10 @@ const todoControl = document.querySelector('.todo-control'),
       headerInput = document.querySelector('.header-input'),
       todoList = document.querySelector('.todo-list'),
       todoCompleted = document.querySelector('.todo-completed'),
-      todoRemove = document.querySelectorAll('.todo-remove');
+      todoRemove = document.querySelectorAll('.todo-remove'),
+      todoContainer = document.querySelector('.todo-container');
 
-let toDoData = [];  
-toDoData = JSON.parse(localStorage.myTodoList);
+let toDoData = JSON.parse(localStorage.value); 
 
 const render = function() {
   todoList.textContent = '';
@@ -30,10 +30,11 @@ const render = function() {
 
     const btnTodoComplete = li.querySelector('.todo-complete');
     btnTodoComplete.addEventListener('click', function(){
+      
       item.completed = !item.completed;
+      localStorage.setItem('value', JSON.stringify(toDoData));
       render();
     });
-
   });
 };
 
@@ -45,24 +46,23 @@ todoControl.addEventListener('submit', function(e){
   };
   if(headerInput.value !== ''){
     toDoData.push(newTodo);
-    let toJson = JSON.stringify(toDoData);
-    localStorage.myTodoList = toJson;
+    localStorage.setItem('value', JSON.stringify(toDoData));
   }
-  
   render();
 });
 
-todoList.addEventListener('click', function(e){
+todoContainer.addEventListener('click', function(e){
   let target = e.target;
   let targetText = target.closest('.todo-item').querySelector('.text-todo').textContent;
   toDoData.forEach(function(item, i){
     if (targetText === item.value && target.classList.contains('todo-remove')){
       toDoData.splice(i,1);
+      let newToDoData = JSON.parse(localStorage.value);
+      newToDoData.splice(i, 1);
+      localStorage.setItem('value', JSON.stringify(newToDoData));
       render();
     }
   });
-  
 });
-
 
 render();
