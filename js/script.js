@@ -7,7 +7,10 @@ const todoControl = document.querySelector('.todo-control'),
       todoRemove = document.querySelectorAll('.todo-remove'),
       todoContainer = document.querySelector('.todo-container');
 
-let toDoData = JSON.parse(localStorage.value); 
+let toDoData = [];      
+if(localStorage.value){
+  toDoData = JSON.parse(localStorage.value); 
+}      
 
 const render = function() {
   todoList.textContent = '';
